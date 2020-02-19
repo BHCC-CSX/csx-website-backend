@@ -1,1 +1,0 @@
-./cloud_sql_proxy -instances=csx-backend:us-east1:chad-test-instance=tcp:3306
