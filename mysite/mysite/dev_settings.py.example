@@ -31,7 +31,7 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'NAME': 'csxdb',
-        'USER': os.environ['CSXDB_USER'],
-        'PASSWORD': os.environ['CSXDB_PASSWORD']
+        'USER': '',
+        'PASSWORD': ''
     }
 }

@@ -12,18 +12,12 @@ DEBUG = False
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-# Install PyMySQL as mysqlclient/MySQLdb to use Django's mysqlclient adapter
-# See https://docs.djangoproject.com/en/2.1/ref/databases/#mysql-db-api-drivers
-# for more information
-# import pymysql  # noqa: 402
-# pymysql.install_as_MySQLdb()
-
 # Running on production App Engine, so connect to Google Cloud SQL using
 # the unix socket at /cloudsql/<your-cloudsql-connection string>
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'HOST': '/cloudsql/bhcc-csx:us-east1:csxdb-instance',
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': '/cloudsql/csx-backend:us-east1:csxdb-instance',
         'NAME': 'csxdb',
         'USER': os.environ['CSXDB_USER'],
         'PASSWORD': os.environ['CSXDB_PASSWORD']
