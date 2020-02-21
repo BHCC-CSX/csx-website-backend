@@ -5,6 +5,8 @@ node_modules
 .vscode
 dev_settings.py
 deploy.sh
+prodproxy.sh
+testproxy.sh
 proxystart.sh
 
 # Created by https://www.gitignore.io/api/django,appengine

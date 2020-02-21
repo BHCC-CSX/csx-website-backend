@@ -16,7 +16,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-if os.getenv('GAE_APPLICATION', None):
+if os.getenv('GAE_INSTANCE', None):
     from .prod_settings import *
 else:
     from .dev_settings import *
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'projects'
 ]
 
 MIDDLEWARE = [
