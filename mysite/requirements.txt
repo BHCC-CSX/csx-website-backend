@@ -9,10 +9,11 @@ protobuf==3.11.3
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pytz==2019.3
+pillow==7.0.0
 rsa==4.0
 six==1.14.0
 sqlparse==0.3.0
 mysqlclient==1.4.1
 wheel==0.33.6
 gunicorn==20.0.4
-psycopg2-binary==2.8.4
+psycopg2==2.8.4
