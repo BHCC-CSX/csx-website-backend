@@ -8,6 +8,7 @@ deploy.sh
 prodproxy.sh
 testproxy.sh
 proxystart.sh
+tools/
 
 # Created by https://www.gitignore.io/api/django,appengine
 # Edit at https://www.gitignore.io/?templates=django,appengine
