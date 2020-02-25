@@ -23,3 +23,6 @@ DATABASES = {
         'PASSWORD': os.environ['CSXDB_PASSWORD']
     }
 }
+
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+GS_BUCKET_NAME = 'csx-backend.appspot.com'

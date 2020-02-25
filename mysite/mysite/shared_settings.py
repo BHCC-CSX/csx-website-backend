@@ -120,6 +120,3 @@ STATIC_URL = 'https://storage.googleapis.com/bhcc-csx.appspot.com/static/'
 STATICFILES_DIRS = [
     "./mysite/static/"
 ]
-
-DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-GS_BUCKET_NAME = 'bhcc-csx.appspot.com'

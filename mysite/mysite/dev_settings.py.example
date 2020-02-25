@@ -21,3 +21,6 @@ DATABASES = {
         'PASSWORD': ''
     }
 }
+
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+GS_BUCKET_NAME = '' # your test project appspot url
