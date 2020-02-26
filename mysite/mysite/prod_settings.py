@@ -2,6 +2,9 @@ import os
 
 DEBUG = False
 
+
+SECRET_KEY = os.environ['CSX_SECRET_KEY']
+
 # SECURE_SSL_REDIRECT = True
 # SECURE_CONTENT_TYPE_NOSNIFF = True
 # SECURE_BROWSER_XSS_FILTER = True

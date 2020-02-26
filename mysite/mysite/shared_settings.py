@@ -21,13 +21,6 @@ if os.getenv('GAE_INSTANCE', None):
 else:
     from .dev_settings import *
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-# Update the secret key to a value of your own before deploying the app.
-SECRET_KEY = os.environ['CSX_SECRET_KEY']
-
 
 # SECURITY WARNING: App Engine's security features ensure that it is safe to
 # have ALLOWED_HOSTS = ['*'] when the app is deployed. If you deploy a Django
