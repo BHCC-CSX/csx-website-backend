@@ -18,9 +18,14 @@ from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
+from .hooks import get_hooks
 
 router = routers.DefaultRouter()
 
+apps = get_hooks("router_hook")
+for app in apps:
+    # print(app().reg.registry)
+    router.registry.extend(app().reg.registry)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,3 +35,4 @@ static_url = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) if se
 
 if static_url is not None:
     urlpatterns += static_url
+
