@@ -17,8 +17,16 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('projects/', include('projects.urls'))
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) if settings.DEBUG else None
+    path('api/', include(router.urls))
+]
+static_url = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) if settings.MEDIA_URL else None
+
+if static_url is not None:
+    urlpatterns += static_url
