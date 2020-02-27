@@ -3,12 +3,14 @@ cloud_sql_proxy
 credentials.yaml
 node_modules
 .vscode
+.idea
 dev_settings.py
 deploy.sh
 prodproxy.sh
 testproxy.sh
 proxystart.sh
 tools/
+new/
 
 # Created by https://www.gitignore.io/api/django,appengine
 # Edit at https://www.gitignore.io/?templates=django,appengine
