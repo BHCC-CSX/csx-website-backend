@@ -26,5 +26,10 @@ DATABASES = {
     }
 }
 
-DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-GS_BUCKET_NAME = 'YOUR_APPENGINE_BUCKET_URL'
+# Only use these settings if you would like to use google cloud storage for testing in development
+# DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+# GS_BUCKET_NAME = 'YOUR_APPENGINE_BUCKET_URL'
+
+# otherwise use these setting for local file serving
+MEDIA_ROOT = 'media'
+MEDIA_URL = '/media/'
