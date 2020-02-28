@@ -5,4 +5,5 @@
 
     documentation
     environment-setup
+    git_help
 ```
