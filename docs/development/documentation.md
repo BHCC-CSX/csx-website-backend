@@ -30,5 +30,4 @@ reStructuredText is supported if required, or you can execute snippets of reST i
     reStructuredText here
     ```
 
-Markdown is used elsewhere on Github so it provides the most portability of documentation from Issues and Pull Requests
-as well as providing an easier initial migration path from the Github wiki.
+Markdown is used elsewhere on Github so it provides the most portability of documentation from Issues and Pull Requests.
