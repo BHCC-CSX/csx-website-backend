@@ -160,7 +160,7 @@ that make working with git very user friendly.
 
 You can find a list of Git GUI clients on the [GUI Clients page at git-scm.com](https://git-scm.com/downloads/guis).
 
-For more information about using git, checkout our [Git Help Documentation](development/git_help.md).
+For more information about using git, checkout our [Git Help Documentation](git_help.md).
 
 ## The Editor
 The two most common editors you will likely come across for python are VSCode and PyCharm, though you can
