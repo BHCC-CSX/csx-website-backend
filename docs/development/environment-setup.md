@@ -19,6 +19,7 @@ from [the python website](https://python.org). (Or, if you are using Windows 10,
 store, just search for Python)
 
 When you run the installer you should see a window like this:
+
 ![Python Installer Window Screenshot](../_static/development/environment/python_installer.png)
 
 ```eval_rst
