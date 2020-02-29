@@ -210,8 +210,43 @@ Though PyCharm Pro is a paid product, you can apply for a Student license for fr
 If you plan to use PyCharm it is a good idea to get the free license to have access to the extra features that Pro provides, however
 the community version would work just fine.
 
-#### Configuring your PyCharm Installation
-_Coming Soon_
+#### PyCharm Project Settings
+Once you have setup pycharm, and opened the project, there are some settings that you will want to configure.
+
+##### Project Interpreter
+First, you will want to set the project interpreter. This is what pycharm will use to give you hints when you use 
+libraries. To open the settings window, you can go to `File > Settings` or hit `Ctrl`+`Alt`+`S`. Then find `Project: <project-name>`
+in the sidebar, and expand it to find the `Project Interpreter` settings. To add an interpreter, click the cog (![cog button](/_static/development/environment/pycharm_cog.png)) and select `Add New`. 
+
+In the window that appears, check the radio button next to `Existing Environment` and then click on the "..." button (![...button](/_static/development/environment/pycharm_dots.png)) and then navigate to your
+venv folder, and find the python executable. Select the python executable, and click the `OK` button. Hit OK on the new interpreter window, and then select the 
+interpreter that you just added from the dropdown.
+
+```eval_rst
+.. note::
+    * On Windows you will be looking for either `python.exe` or `pythonw.exe`, both will work.
+      * On Windows this will be located in the `Scripts` folder of your venv.
+    * On Linux and macOS the executable file will just be called `python`
+      * On Linux and macOS this will be located in the `lib` folder of your venv.
+```
+
+##### Django Support
+Back in the settings window, you should find `Languages and Frameworks` in the sidebar. When you expand this
+category, you one of the sub-categories will be `Django`. Select Django and tick the `Enable Django Support` box. 
+
+Now click the little folder icon in the text box next to `Django Project Root`, and navigate to the folder in the project folder 
+containing `manage.py`, and hit ok.   
+
+##### Run/Debug Configurations
+PyCharm comes with a debugger that you can use to run your applications with, but it needs to be configured.
+
+At the top right of the IDE window you will see a button that says `Add Configuration`. Click this button and you should have a window pop up titled `Run/Debug Configurations`.
+At the top left of the window you should see a plus (+) sign. Click on the plus sign and select the `Django Server` option from the dropdown. 
+
+You should not need to change any of the settings, except for the interpreter as it may or may not be automatically set to the project interpreter. If it is not set to the project interpreter
+just select the project interpreter from the dropdown.
+
+By default it will start the server on port 8000, you should not need to change this unless you already have something running on that port.
 
 
 ## Postgres
