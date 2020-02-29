@@ -225,9 +225,9 @@ interpreter that you just added from the dropdown.
 ```eval_rst
 .. note::
     * On Windows you will be looking for either `python.exe` or `pythonw.exe`, both will work.
-      * On Windows this will be located in the `Scripts` folder of your venv.
+        * On Windows this will be located in the `Scripts` folder of your venv.
     * On Linux and macOS the executable file will just be called `python`
-      * On Linux and macOS this will be located in the `lib` folder of your venv.
+        * On Linux and macOS this will be located in the `lib` folder of your venv.
 ```
 
 ##### Django Support
