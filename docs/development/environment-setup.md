@@ -104,8 +104,8 @@ To deactivate the venv, simply run the command `deactivate`.
 This project is developed using Git for version control. Git allows multiple people to work on the same
 project without getting in each other's way, and makes tracking and reversing changes simple.
 
-### Windows
-#### Installing Git
+### Installing Git
+#### Windows
 The Git windows installer can be found at [git-scm.com](https://git-scm.com). The installation is very simple,
 just keep all the default settings in the installer, and you'll be good to go.
 
@@ -117,7 +117,7 @@ $ git config --global user.name "FIRST_NAME LAST_NAME"
 $ git config --global user.email "MY_NAME@example.com"
 ```
 
-### Linux
+#### Linux
 Installing git on Ubuntu is a very simple process. All you need to do is open up a terminal window
 and run the following commands:
 
@@ -132,7 +132,7 @@ $ git config --global user.name "Your Name"
 $ git config --global user.email "youremail@yourdomain.com"
 ```
 
-### macOS
+#### macOS
 Depending on your version of macOS, you might already have git installed. To check, open a terminal
 window and run the following command:
 ```bash
