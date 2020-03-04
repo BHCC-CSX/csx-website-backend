@@ -6,4 +6,5 @@
     documentation
     environment-setup
     git_help
+    writing_an_app
 ```
