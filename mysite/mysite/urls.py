@@ -22,14 +22,17 @@ from .hooks import get_hooks
 
 router = routers.DefaultRouter()
 
-apps = get_hooks("router_hook")
+api_urls = []
+
+apps = get_hooks("url_hook")
 for app in apps:
     # print(app().reg.registry)
-    router.registry.extend(app().reg.registry)
+    api_urls += app().pats
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls))
+    path('api/', include(api_urls))
 ]
 static_url = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) if settings.MEDIA_URL else None
 

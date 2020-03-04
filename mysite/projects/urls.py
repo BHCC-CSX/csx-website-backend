@@ -7,6 +7,6 @@ from . import views
 router = routers.DefaultRouter()
 router.register(prefix='projects', viewset=ProjectViewSet, basename='projects')
 
-# urlpatterns = [
-#     path('', include(router.urls)),
-# ]
+urlpatterns = [
+    path('', include(router.urls)),
+]

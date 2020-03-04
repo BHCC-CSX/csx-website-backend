@@ -1,8 +1,8 @@
-from mysite.site_hooks import RouterHook
+from mysite.site_hooks import URLHook
 from mysite import hooks
-from .urls import router
+from .urls import urlpatterns
 
 
-@hooks.register('router_hook')
+@hooks.register('url_hook')
 def register_router():
-    return RouterHook(router)
+    return URLHook(urlpatterns)
