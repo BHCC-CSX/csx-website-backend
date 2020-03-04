@@ -290,4 +290,130 @@ By default it will start the server on port 8000, you should not need to change 
 
 ## Postgres
 
+### Installing Postgres
+
+#### Windows
+
+Installing postgresql on Windows is pretty simple.
+
+Install instructions and a link to the installer download can be found at the [postgres website](https://www.postgresql.org/download/windows/).
+
+Simply download and run the installer for the desired version of postgresql to install it.
+
+```eval_rst
+.. note::
+    The windows version of postgres comes with the option to install pgAdmin alongside postgres
+    which provides a simple web-ui for managing your postgresql installation.
+```
+
+
+```eval_rst
+.. note::
+    In order to make use of the psql command in command prompy on windows you will 
+    want to add `C:\Program Files\PostgreSQL\XX\bin\psql.exe` to your PATH.
+
+    Instructions for adding to your PATH on your version of windows can be found `here <https://www.java.com/en/download/help/path.xml>`_.
+``` 
+
+#### Linux
+Like other sections of this documentation, we will assume that you are using Ubuntu.
+
+Depending on the version of Ubuntu that you are running, the versions listed, and some commands may be slightly different.
+
+To install postgres on Ubuntu, you will need to install two packages from apt, `postgresql` and `postgresql-contrib`.
+
+```bash
+$ sudo apt-get install postgresql postgresql-contrib
+```
+
+##### Configuring Postgres
+The postgres service may not start automatically, to check if it is running run the folloqing command:
+
+```bash
+$ sudo service postgresql status
+```
+
+If is is not running you should see `10/main (port 5432): down`, to turn it on run the following command:
+
+```bash
+$ sudo service postgresql start
+```
+
+Postgres should now be running.
+
+#### macOS
 _Coming Soon_
+
+
+### Creating a User and Database
+It is generally understood that running applications with root permissions is a bad idea. This 
+extends to database access too. So to avoid using the postgres equivalent of a root user (which is just postgres... so original)
+we will create a new user, and the database that we are going to use.
+
+
+#### Accessing the Postgres CLI
+##### Windows
+_Coming Soon_
+
+##### Linux
+To access postgres from the command line you will have to sudo the postgres user, as postgres by default
+uses system authentication. There are two ways to do this.
+
+The first option is to use `sudo su` to switch your user to the postgres user. Then after switching
+to the postgres user, you can run the `psql` command to enter the postgres cli.
+
+```bash
+$ sudo su postgres
+$ psql
+```
+
+The second option is to just use sudo to run the psql command as the postgres user.
+
+```bash
+$ sudo -u postgres psql
+```
+
+You will know you are in the postgres CLI rather than bash when you see the following:
+
+```bash
+psql (10.9 (Ubuntu 10.9-0ubuntu0.18.04.1))
+Type "help" for help.
+
+dbname=#
+```
+
+Where dbname is the database that you are currently connected to. Which for the case of the above 
+commands will be `postgres`.
+
+##### macOS
+_Coming Soon_
+
+#### Creating a User
+Once you are connected connected to the database CLI, SQL commands are pretty standard. Though if you are 
+used to MySQL or some other SQL server, there are some slight differences.
+
+The following is the command to create a new user.
+
+```sql
+CREATE USER user_name WITH PASSWORD 'password';
+```
+
+Where `user_name` is the user name you wish to give to the user, and `'password'` is the password that you
+would like to give the user (_Thus must be kept inside single quotes!_).
+
+#### Creating a Database
+The following is the command to create a new database.
+
+```sql
+CREATE DATABASE db_name;
+```
+
+Now, you have to give the user the ability to work on the database. To do this use the following
+command.
+
+```sql
+GRANT ALL PRIVILEGES ON DATABASE db_name TO user_name;
+```
+
+Once you have created your database and user, as well as assigned permissions to the 
+user on the database, you can exit the postgres CLI by entering the `\q` command.
