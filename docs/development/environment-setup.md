@@ -353,7 +353,13 @@ we will create a new user, and the database that we are going to use.
 
 #### Accessing the Postgres CLI
 ##### Windows
-_Coming Soon_
+Assuming that you have added `psql.exe` to your path, the following command should be all you need to access the postgres CLI:
+
+```
+$ psql -U postgres -W
+```
+
+You will be prompted to enter the password that you set when you ran the installer. If you set no password, you can leave off the `-W`.
 
 ##### Linux
 To access postgres from the command line you will have to sudo the postgres user, as postgres by default

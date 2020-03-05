@@ -30,3 +30,9 @@ but it will not actually download the changes, so will not affect your working f
 
 ## Making Changes
 This is the fun part. We get to write code, and share it with everyone!
+
+### Committing Your Changes
+_Coming Soon_
+
+### Pushing Your Changes
+_Coming Soon_
