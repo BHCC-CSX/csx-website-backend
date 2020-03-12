@@ -200,9 +200,16 @@ use anything you want to write python code.
 
 ### VSCode
 
-_Coming Soon_
+VSCode, or Visual Studio Code is an open source, cross platform text editor developed and maintained by Microsoft. Popular among web
+developers, VSCode has a similar look and feel to Microsoft's Visual Studio line of IDEs which are commonly used for C++ and C# development.
 
-<!-- A popular choie for web developers, Visual Studio Code is an open source, cross platform text editor. The program looks and feels very similar to the Visual Studio IDE commonly used for C++ and C# development. Source control and terminal integrations make developi -->
+Though the editor itself is fairly bare bones, it has an extensive extension library to add all sorts of functionality as well
+as modify the look and feel of the application. 
+
+For the purposes of this project there are no extensions that you _need_ other than the python extension authored by Microsoft. 
+
+#### Configuring VSCode
+_Coming Soon_
 
 ### PyCharm
 
