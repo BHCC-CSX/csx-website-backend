@@ -4,5 +4,5 @@ from .urls import urlpatterns
 
 
 @hooks.register('url_hook')
-def register_router():
+def register_patterns():
     return URLHook(urlpatterns)
