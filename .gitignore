@@ -128,6 +128,9 @@ celerybeat-schedule
 # mkdocs documentation
 /site
 
+# PyCharm Project Files
+.idea/*
+
 # mypy
 .mypy_cache/
 .dmypy.json
