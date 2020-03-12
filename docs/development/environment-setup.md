@@ -317,7 +317,7 @@ Simply download and run the installer for the desired version of postgresql to i
 ```eval_rst
 .. note::
     In order to make use of the psql command in command prompy on windows you will 
-    want to add `C:\Program Files\PostgreSQL\XX\bin\psql.exe` to your PATH.
+    want to add `C:\\Program Files\\PostgreSQL\\XX\\bin\\psql.exe` to your PATH.
 
     Instructions for adding to your PATH on your version of windows can be found `here <https://www.java.com/en/download/help/path.xml>`_.
 ``` 
