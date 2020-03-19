@@ -11,6 +11,10 @@ class ProjectViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = ProjectSerializer
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(is_approved=True)
+
 class ProjectListCreate(generics.ListCreateAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
