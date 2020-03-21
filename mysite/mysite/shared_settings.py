@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
+if 'PROD_ENV' in os.environ:
+    from .prod_settings import *
+else:
+    from .dev_settings import *
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -99,9 +104,6 @@ USE_TZ = True
 
 
 if 'PROD_ENV' in os.environ:
-    from .prod_settings import *
-else:
-    from .dev_settings import *
-
-
+    import django_heroku
+    django_heroku.settings(locals())
 
