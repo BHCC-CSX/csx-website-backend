@@ -4,6 +4,8 @@ astroid==2.3.3
 autopep8==1.5
 Babel==2.8.0
 beautifulsoup4==4.6.0
+boto3==1.12.26
+botocore==1.15.26
 cachetools==4.0.0
 certifi==2019.11.28
 chardet==3.0.4
@@ -18,7 +20,7 @@ django-storages==1.8
 django-taggit==1.2.0
 django-treebeard==4.3.1
 djangorestframework==3.11.0
-docutils==0.16
+docutils==0.15.2
 draftjs-exporter==2.1.7
 gunicorn==20.0.4
 html5lib==1.0.1
@@ -27,6 +29,7 @@ idna==2.9
 imagesize==1.2.0
 isort==4.3.21
 Jinja2==2.11.1
+jmespath==0.9.5
 l18n==2018.5
 lazy-object-proxy==1.4.3
 MarkupSafe==1.1.1
@@ -42,10 +45,12 @@ pyasn1-modules==0.2.8
 pycodestyle==2.5.0
 Pygments==2.5.2
 pylint==2.4.4
+python-dateutil==2.8.1
 pytz==2019.3
 recommonmark==0.4.0
 requests==2.23.0
 rsa==4.0
+s3transfer==0.3.3
 six==1.14.0
 snowballstemmer==2.0.0
 Sphinx==1.4.9
