@@ -1,5 +1,6 @@
 import os
 import dj_database_url
+import django_heroku
 
 DEBUG = False
 
@@ -28,3 +29,5 @@ STATICFILES_STORAGE = 'mysite.storage_backends.StaticStorage'
 PUBLIC_MEDIA_LOCATION = 'media'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
 DEFAULT_FILE_STORAGE = 'mysite.storage_backends.PublicMediaStorage'
+
+django_heroku.settings(locals())
