@@ -38,8 +38,9 @@ INSTALLED_APPS = [
     'storages',
     'rest_framework',
     'corsheaders',
-    'projects'
     'drf_yasg',
+    'projects',
+    'blog',
 ]
 
 MIDDLEWARE = [
