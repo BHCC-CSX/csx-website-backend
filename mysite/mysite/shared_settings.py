@@ -12,15 +12,13 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-if os.getenv('GAE_INSTANCE', None):
+if 'PROD_ENV' in os.environ:
     from .prod_settings import *
 else:
     from .dev_settings import *
 
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: App Engine's security features ensure that it is safe to
 # have ALLOWED_HOSTS = ['*'] when the app is deployed. If you deploy a Django
@@ -37,11 +35,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
     'rest_framework',
+    'corsheaders',
     'projects'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -103,13 +104,13 @@ USE_L10N = True
 
 USE_TZ = True
 
+# CORS
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
+CORS_ORIGIN_ALLOW_ALL = True
 
-STATIC_ROOT = 'static'
-STATIC_URL = 'https://storage.googleapis.com/bhcc-csx.appspot.com/static/'
+# Deployment to Heroku
 
-STATICFILES_DIRS = [
-    "./mysite/static/"
-]
+if 'PROD_ENV' in os.environ:
+    import django_heroku
+    django_heroku.settings(locals())
+

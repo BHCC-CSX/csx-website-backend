@@ -1,31 +1,32 @@
 import os
+import dj_database_url
+
 
 DEBUG = False
 
+# Secret key
 
-SECRET_KEY = os.environ['CSX_SECRET_KEY']
-
-# SECURE_SSL_REDIRECT = True
-# SECURE_CONTENT_TYPE_NOSNIFF = True
-# SECURE_BROWSER_XSS_FILTER = True
-# CSRF_COOKIE_SECURE = True
-# SESSION_COOKIE_SECURE = True
-# X_FRAME_OPTIONS = 'DENY'
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 # Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-# Running on production App Engine, so connect to Google Cloud SQL using
-# the unix socket at /cloudsql/<your-cloudsql-connection string>
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': '/cloudsql/csx-backend:us-east1:csxdb-instance',
-        'NAME': 'csxdb',
-        'USER': os.environ['CSXDB_USER'],
-        'PASSWORD': os.environ['CSXDB_PASSWORD']
-    }
-}
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
-DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-GS_BUCKET_NAME = 'csx-backend.appspot.com'
+# Storage
+
+AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+# S3 static storage
+STATIC_LOCATION = 'static'
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
+STATICFILES_STORAGE = 'mysite.storage_backends.StaticStorage'
+
+# S3 media storage
+PUBLIC_MEDIA_LOCATION = 'media'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
+DEFAULT_FILE_STORAGE = 'mysite.storage_backends.PublicMediaStorage'
+
