@@ -135,8 +135,10 @@ class CategoryList(APIView):
     def post(self, request, format=None):
         serializer = CategorySerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
+            obj = serializer.save()
+            data = serializer.data
+            data['id'] = obj.id
+            return Response(data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
