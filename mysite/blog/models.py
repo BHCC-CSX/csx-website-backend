@@ -13,6 +13,9 @@ def get_sentinel_user():
 class Category(models.Model):
     name = models.CharField(max_length=250)
 
+    def __str__(self):
+        return self.name
+
 
 class Post(models.Model):
     title = models.CharField(max_length=1000)   # Could probably be shorter.
@@ -20,3 +23,6 @@ class Post(models.Model):
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user))
     image = models.ImageField(upload_to='images', null=True)
+
+    def __str__(self):
+        return self.title
