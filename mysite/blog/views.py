@@ -15,7 +15,6 @@ class PostList(APIView):
     API Endpoint to List Posts
     METHODS: GET, POST
     """
-    parser_classes = (MultiPartParser,)
 
     @swagger_auto_schema(responses={200: PostSerializer(many=True), 500: "Internal Server Error"})
     def get(self, request, format=None):
@@ -25,13 +24,14 @@ class PostList(APIView):
 
     @swagger_auto_schema(responses={201: "Post Created", 400: "Bad Request", 500: "Internal Server Error"},
                          operation_description="Creates Post",
-                         request_body=PostSerializer)
+                         request_body=PostCreationSerializer)
     def post(self, request, format=None):
         serializer = PostCreationSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
-        print(serializer.errors)
+            obj = serializer.save()
+            data = serializer.data
+            data["id"] = obj.id
+            return Response(data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
