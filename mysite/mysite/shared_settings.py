@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'storages',
     'rest_framework',
     'corsheaders',
-    'projects'
+    'drf_yasg',
+    'projects',
+    'blog',
 ]
 
 MIDDLEWARE = [
@@ -89,6 +91,12 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',  # noqa: 501
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
+}
 
 
 # Internationalization
