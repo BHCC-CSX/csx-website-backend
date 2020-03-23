@@ -3,6 +3,8 @@ from .models import *
 from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser
+from mysite.parsers import ImageParser
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 
@@ -13,6 +15,7 @@ class PostList(APIView):
     API Endpoint to List Posts
     METHODS: GET, POST
     """
+    parser_classes = (MultiPartParser,)
 
     @swagger_auto_schema(responses={200: PostSerializer(many=True), 500: "Internal Server Error"})
     def get(self, request, format=None):
@@ -24,7 +27,7 @@ class PostList(APIView):
                          operation_description="Creates Post",
                          request_body=PostSerializer)
     def post(self, request, format=None):
-        serializer = PostSerializer(data=request.data)
+        serializer = PostCreationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_201_CREATED)
@@ -72,7 +75,7 @@ class PostDetail(APIView):
         if post is None:
             return Response(error, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = PostSerializer(post, data=request.data, partial=True)
+        serializer = PostCreationSerializer(post, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_200_OK)
@@ -88,6 +91,32 @@ class PostDetail(APIView):
 
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class PostImage(APIView):
+    parser_classes = (MultiPartParser, ImageParser)
+
+    @swagger_auto_schema(responses={201: "Resource Created",
+                                    400: "Bad Request",
+                                    404: "Post Not Found",
+                                    415: "Unsupported Media Type",
+                                    500: "Internal Server Error"},
+                         operation_description="Set the image for a project.",
+                         request_body=PostImageSerializer)
+    def post(self, request, post_id, format=None):
+        try:
+            post = Post.objects.get(pk=post_id)
+        except:
+            return Response({"error": "Post Not Found"}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            serializer = PostImageSerializer(post, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(status=status.HTTP_201_CREATED)
+            return Response({"error": "Bad Request"}, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response({"error": "Unsupported Media Type"}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
 
 class CategoryList(APIView):

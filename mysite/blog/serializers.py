@@ -9,6 +9,18 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 
 
+class PostCreationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ("title", "content", "category", "author")
+
+
+class PostImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ("image",)
+
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
