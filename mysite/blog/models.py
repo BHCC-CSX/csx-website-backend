@@ -19,3 +19,4 @@ class Post(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user))
+    image = models.ImageField(upload_to='images', null=True)
