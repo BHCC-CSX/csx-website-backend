@@ -14,13 +14,14 @@ class PostList(APIView):
     METHODS: GET, POST
     """
 
-    @swagger_auto_schema(responses={200: PostSerializer(many=True)})
+    @swagger_auto_schema(responses={200: PostSerializer(many=True), 500: "Internal Server Error"})
     def get(self, request, format=None):
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
 
-    @swagger_auto_schema(responses={201: "Post Created", 400: "Bad Request"}, operation_description="Creates Post",
+    @swagger_auto_schema(responses={201: "Post Created", 400: "Bad Request", 500: "Internal Server Error"},
+                         operation_description="Creates Post",
                          request_body=PostSerializer)
     def post(self, request, format=None):
         serializer = PostSerializer(data=request.data)
@@ -51,7 +52,9 @@ class PostDetail(APIView):
         except:
             return False
 
-    @swagger_auto_schema(responses={200: PostSerializer(many=False), 404: "Post Not Found"})
+    @swagger_auto_schema(responses={200: PostSerializer(many=False),
+                                    404: "Post Not Found",
+                                    500: "Internal Server Error"})
     def get(self, request, post_id, format=None):
         post, error = self.__get_obj(post_id)
         if post is None:
@@ -59,7 +62,10 @@ class PostDetail(APIView):
         serializer = PostSerializer(post)
         return Response(serializer.data)
 
-    @swagger_auto_schema(responses={200: "Success", 404: "Post Not Found", 400: "Bad Request"},
+    @swagger_auto_schema(responses={200: "Success",
+                                    404: "Post Not Found",
+                                    400: "Bad Request",
+                                    500: "Internal Server Error"},
                          request_body=PostSerializer(partial=True))
     def patch(self, request, post_id, format=None):
         post, error = self.__get_obj(post_id)
@@ -72,7 +78,9 @@ class PostDetail(APIView):
             return Response(status=status.HTTP_200_OK)
         return Response(status.HTTP_400_BAD_REQUEST)
 
-    @swagger_auto_schema(responses={204: "No Content", 404: "Post Not Found"})
+    @swagger_auto_schema(responses={204: "No Content",
+                                    404: "Post Not Found",
+                                    500: "Internal Server Error"})
     def delete(self, request, post_id, format=None):
         post, error = self.__get_obj(post_id)
         if post is None:
@@ -87,14 +95,14 @@ class CategoryList(APIView):
     API Endpoint to get or create categories.
     METHODS: GET, POST
     """
-    @swagger_auto_schema(responses={200: CategorySerializer(many=True)})
+    @swagger_auto_schema(responses={200: CategorySerializer(many=True), 500: "Internal Server Error"})
     def get(self, request, format=None):
         cats = Category.objects.all()
         serializer = CategorySerializer(cats, many=True)
         return Response(serializer.data)
 
-    @swagger_auto_schema(responses={201: "Post Created", 400: "Bad Request"},
-                         request_body=CategorySerializer)
+    @swagger_auto_schema(responses={201: "Post Created", 400: "Bad Request", 500: "Internal Server Error"},
+                         request_body=CategorySerializer())
     def post(self, request, format=None):
         serializer = CategorySerializer(data=request.data)
         if serializer.is_valid():
@@ -115,7 +123,9 @@ class CategoryDetails(APIView):
         except:
             return None, {'error': 'Category object not found.'}
 
-    @swagger_auto_schema(responses={200: CategorySerializer(many=False), 404: "Category Not Found"})
+    @swagger_auto_schema(responses={200: CategorySerializer(many=False),
+                                    404: "Category Not Found",
+                                    500: "Internal Server Error"})
     def get(self, request, cat_id, format=None):
         cat, error = self.__get_obj(cat_id)
         if cat is None:
@@ -124,7 +134,7 @@ class CategoryDetails(APIView):
         serializer = CategorySerializer(cat)
         return Response(serializer.data)
 
-    @swagger_auto_schema(responses={204: "No Content", 404: "Category Not Found"})
+    @swagger_auto_schema(responses={204: "No Content", 404: "Category Not Found", 500: "Internal Server Error"})
     def delete(self, request, cat_id, format=None):
         cat, error = self.__get_obj(cat_id)
         if cat is None:
