@@ -12,4 +12,5 @@ urlpatterns = [
     path('posts/<int:post_id>/image/', views.PostImage.as_view()),
     path('categories/', views.CategoryList.as_view(), name="category-list"),
     path('categories/<int:cat_id>/', views.CategoryDetails.as_view()),
+    path('categories/<int:cat_id>/posts/', views.CategoryPosts.as_view()),
 ]

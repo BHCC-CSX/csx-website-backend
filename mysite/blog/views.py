@@ -20,7 +20,7 @@ class PostList(APIView):
     def get(self, request, format=None):
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(responses={201: "Post Created", 400: "Bad Request", 500: "Internal Server Error"},
                          operation_description="Creates Post",
@@ -173,3 +173,23 @@ class CategoryDetails(APIView):
 
         cat.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CategoryPosts(APIView):
+    """
+    Endpoint for getting the posts of a category.
+    METHODS: GET
+    """
+    @swagger_auto_schema(responses={200: PostSerializer(many=True), 204: "No Content",
+                                    404: "Category Not Found", 500: "Internal Server Error"})
+    def get(self, request, cat_id, format=None):
+        try:
+            cat = Category.objects.get(pk=cat_id)
+        except:
+            return Response({"error": "Category could not be found!"}, status=status.HTTP_404_NOT_FOUND)
+        posts = Post.objects.filter(category=cat)
+        if len(posts) is 0:
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
