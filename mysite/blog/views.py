@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from .models import *
 from .serializers import *
+from django.db.models import Case, When
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser
 from mysite.parsers import ImageParser
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 
 # Create your views here.
@@ -133,13 +135,19 @@ class CategoryList(APIView):
     @swagger_auto_schema(responses={201: "Post Created", 400: "Bad Request", 500: "Internal Server Error"},
                          request_body=CategorySerializer())
     def post(self, request, format=None):
+        cat = Category.objects.filter(name=request.data['name'])
+
         serializer = CategorySerializer(data=request.data)
         if serializer.is_valid():
             obj = serializer.save()
             data = serializer.data
             data['id'] = obj.id
             return Response(data, status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        if len(cat) > 0:
+            msg = {"error": "Category already exists"}
+        else:
+            msg = {"error": "Bad Request"}
+        return Response(msg, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CategoryDetails(APIView):
@@ -193,3 +201,27 @@ class CategoryPosts(APIView):
 
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ResolveCategoryID(APIView):
+    """
+    Endpoint to get an IDs for given category names.
+    METHODS: POST
+    """
+    name_schema = openapi.Schema(type="string")
+    request_schema = openapi.Schema(type="array", items=name_schema)
+
+    @swagger_auto_schema(responses={200: openapi.Response("Success",
+                                                          schema=CategoryIDSerializer,
+                                                          examples={"application/json": [1, 2]}),
+                                    404: "Category Not Found", 500: "Internal Server Error",
+                                    400: "Bad Request"},
+                         operation_id="blog_categories_names_to_ids", request_body=request_schema)
+    def post(self, request, format=None):
+        names = request.data
+        order = Case(*[When(name=name, then=pos) for pos, name in enumerate(names)])
+        ids = Category.objects.filter(name__in=names).values_list("id", flat=True).order_by(order)
+        if len(names) == len(ids):
+            return Response(list(ids), status=status.HTTP_200_OK)
+
+        return Response({"error": "Bad Request"}, status=status.HTTP_400_BAD_REQUEST)

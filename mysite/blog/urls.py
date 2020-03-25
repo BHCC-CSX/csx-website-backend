@@ -13,4 +13,5 @@ urlpatterns = [
     path('categories/', views.CategoryList.as_view(), name="category-list"),
     path('categories/<int:cat_id>/', views.CategoryDetails.as_view()),
     path('categories/<int:cat_id>/posts/', views.CategoryPosts.as_view()),
+    path('categories/ids/', views.ResolveCategoryID.as_view()),
 ]
