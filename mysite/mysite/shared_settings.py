@@ -121,7 +121,4 @@ CORS_ORIGIN_ALLOW_ALL = True
 if 'PROD_ENV' in os.environ:
     import django_heroku
     django_heroku.settings(locals())
-    # Force SSL
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SECURE_SSL_REDIRECT = True
 
