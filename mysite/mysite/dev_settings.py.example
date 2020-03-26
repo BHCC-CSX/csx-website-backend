@@ -7,6 +7,10 @@ DEBUG = True
 
 SECRET_KEY = 'YOUR_SECRET_KEY'
 
+# Force SSL
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = False
+
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
