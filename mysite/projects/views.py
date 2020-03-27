@@ -1,5 +1,4 @@
-from rest_framework import generics, viewsets, permissions
-from rest_framework.views import APIView
+from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser
@@ -9,9 +8,9 @@ from drf_yasg.utils import swagger_auto_schema
 from mysite.parsers import ImageParser
 from .models import Project
 from .serializers import ProjectSerializer, ProjectCreationSerializer, ProjectImageSerializer
+
+
 # Create your views here.
-
-
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     permission_classes = [

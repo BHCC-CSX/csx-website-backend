@@ -1,5 +1,3 @@
-from django.shortcuts import render
-from .models import *
 from .serializers import *
 from django.db.models import Case, When
 from rest_framework.views import APIView
