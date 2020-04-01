@@ -1,20 +1,24 @@
 from .serializers import *
 from django.db.models import Case, When
 from rest_framework.views import APIView
+from mysite.views import CustomAPIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser
+from rest_framework.decorators import permission_classes
 from mysite.parsers import ImageParser
-from rest_framework import status
+from rest_framework import status, permissions
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 
 # Create your views here.
-class PostList(APIView):
+class PostList(CustomAPIView):
     """
     API Endpoint to List Posts
     METHODS: GET, POST
     """
+    permission_classes = {"get": [permissions.AllowAny],
+                          "post": [permissions.IsAuthenticated]}
 
     @swagger_auto_schema(responses={200: PostSerializer(many=True), 500: "Internal Server Error"})
     def get(self, request, format=None):
@@ -35,11 +39,14 @@ class PostList(APIView):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class PostDetail(APIView):
+class PostDetail(CustomAPIView):
     """
     API Endpoint to get, edit, or delete a post.
     METHODS: GET, PATCH, DELETE
     """
+    permission_classes = {"get": [permissions.AllowAny],
+                          "patch": [permissions.IsAuthenticated],
+                          "delete": [permissions.IsAdminUser]}
     @staticmethod
     def __get_obj(obj_id):
         try:
@@ -93,8 +100,10 @@ class PostDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class PostImage(APIView):
+class PostImage(CustomAPIView):
     parser_classes = (MultiPartParser, ImageParser)
+
+    permission_classes = [permissions.IsAuthenticated]
 
     @swagger_auto_schema(responses={201: "Resource Created",
                                     400: "Bad Request",
@@ -119,11 +128,14 @@ class PostImage(APIView):
             return Response({"error": "Unsupported Media Type"}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
 
-class CategoryList(APIView):
+class CategoryList(CustomAPIView):
     """
     API Endpoint to get or create categories.
     METHODS: GET, POST
     """
+    permission_classes = {"get": [permissions.AllowAny],
+                          "post": [permissions.IsAdminUser]}
+
     @swagger_auto_schema(responses={200: CategorySerializer(many=True), 500: "Internal Server Error"})
     def get(self, request, format=None):
         cats = Category.objects.all()
@@ -148,11 +160,14 @@ class CategoryList(APIView):
         return Response(msg, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CategoryDetails(APIView):
+class CategoryDetails(CustomAPIView):
     """
     API Endpoint to get or delete a category.
     METHODS: DELETE
     """
+    permission_classes = {"get": [permissions.AllowAny],
+                          "delete": [permissions.IsAdminUser]}
+
     @staticmethod
     def __get_obj(obj_id):
         try:
@@ -181,11 +196,13 @@ class CategoryDetails(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class CategoryPosts(APIView):
+class CategoryPosts(CustomAPIView):
     """
     Endpoint for getting the posts of a category.
     METHODS: GET
     """
+    permission_classes = {"get": [permissions.AllowAny]}
+
     @swagger_auto_schema(responses={200: PostSerializer(many=True), 204: "No Content",
                                     404: "Category Not Found", 500: "Internal Server Error"})
     def get(self, request, cat_id, format=None):
@@ -206,6 +223,7 @@ class ResolveCategoryID(APIView):
     Endpoint to get an IDs for given category names.
     METHODS: POST
     """
+    permission_classes = [permissions.AllowAny]
     name_schema = openapi.Schema(type="string")
     request_schema = openapi.Schema(type="array", items=name_schema)
 
