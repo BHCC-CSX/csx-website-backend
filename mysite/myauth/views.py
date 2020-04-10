@@ -1,14 +1,11 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import permissions
-from oauth2_provider.contrib.rest_framework import TokenHasReadWriteScope, TokenHasScope
 from .serializers import *
 from rest_framework import status
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from oauth2_provider.settings import oauth2_settings
-from oauth2_provider.views.mixins import OAuthLibMixin
 import json
 from django.db import transaction
 
@@ -19,7 +16,7 @@ class UserList(APIView):
     API Endpoint to list users.
     METHODS: GET
     """
-    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    permission_classes = [permissions.IsAuthenticated, ]
 
     @swagger_auto_schema(responses={200: UserSerializer(many=True), 500: "Internal Server Error"})
     def get(self, request, format=None):
@@ -34,10 +31,6 @@ class UserRegister(APIView):
     METHODS: POST
     """
     permission_classes = (permissions.AllowAny,)
-
-    server_class = oauth2_settings.OAUTH2_SERVER_CLASS
-    validator_class = oauth2_settings.OAUTH2_VALIDATOR_CLASS
-    oauthlib_backend_class = oauth2_settings.OAUTH2_BACKEND_CLASS
 
     @swagger_auto_schema(responses={200: "Success", 500: "Internal Server Error",
                                     400: "Bad Request", 403: "Bad Request", 201: "Created"})
@@ -67,7 +60,7 @@ class UserDetail(APIView):
     API Endpoint to get the details for a user.
     METHODS: GET
     """
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, TokenHasReadWriteScope]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
     @swagger_auto_schema(responses={200: UserSerializer(), 404: "User Not Found", 400: "Bad Request",
                                     500: "Internal Server Error"})
     def get(self, request, user_id, format=None):
@@ -84,7 +77,7 @@ class Groups(APIView):
     API Endpoint to get groups.
     METHODS: GET
     """
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, TokenHasScope]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
     @swagger_auto_schema(responses={200: GroupSerializer(many=True), 500: "Internal Server Error",
                                     400: "Bad Request"})
