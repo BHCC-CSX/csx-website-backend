@@ -8,21 +8,39 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 import json
 from django.db import transaction
+from mysite.views import CustomAPIView
 
 
 # Create your views here.
-class UserList(APIView):
+class UserList(CustomAPIView):
     """
     API Endpoint to list users.
     METHODS: GET
     """
-    permission_classes = [permissions.IsAuthenticated, ]
+    permission_classes = {"get": [permissions.IsAuthenticated, ],
+                          "post": [permissions.AllowAny, ],}
+    name_schema = openapi.Schema(type="integer")
+    request_schema = openapi.Schema(type="array", items=name_schema)
 
     @swagger_auto_schema(responses={200: UserSerializer(many=True), 500: "Internal Server Error"})
     def get(self, request, format=None):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(responses={200: UserNamesSerializer(many=True),
+                                    400: "Bad Request",
+                                    404: "Resource Not Found",
+                                    500: "Internal Server Error"}, request_body=request_schema,
+                         operation_id="users_bulk_ids_to_names")
+    def post(self, request, format=None):
+        ids = request.data
+        names = User.objects.filter(pk__in=ids)
+        serializer = UserNamesSerializer(names, many=True)
+        if len(names) == len(ids):
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response({"error": "Bad Request"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserRegister(APIView):

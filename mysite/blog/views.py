@@ -220,7 +220,7 @@ class CategoryPosts(CustomAPIView):
 
 class ResolveCategoryID(APIView):
     """
-    Endpoint to get an IDs for given category names.
+    Endpoint to get IDs for given category names.
     METHODS: POST
     """
     permission_classes = [permissions.AllowAny]
@@ -239,5 +239,30 @@ class ResolveCategoryID(APIView):
         ids = Category.objects.filter(name__in=names).values_list("id", flat=True).order_by(order)
         if len(names) == len(ids):
             return Response(list(ids), status=status.HTTP_200_OK)
+
+        return Response({"error": "Bad Request"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ResolveCategoryName(APIView):
+    """
+    Endpoint to get names for given category IDs.
+    METHODS: POST
+    """
+    permission_classes = [permissions.AllowAny]
+    name_schema = openapi.Schema(type="integer")
+    request_schema = openapi.Schema(type="array", items=name_schema)
+
+    @swagger_auto_schema(responses={200: openapi.Response("Success",
+                                                          schema=CategoryIDSerializer,
+                                                          examples={"application/json": [1, 2]}),
+                                    404: "Category Not Found", 500: "Internal Server Error",
+                                    400: "Bad Request"},
+                         operation_id="blog_categories_ids_to_names", request_body=request_schema)
+    def post(self, request, format=None):
+        ids = request.data
+        order = Case(*[When(pk=id_, then=pos) for pos, id_ in enumerate(ids)])
+        names = Category.objects.filter(pk__in=ids).values_list("name", flat=True).order_by(order)
+        if len(names) == len(ids):
+            return Response(list(names), status=status.HTTP_200_OK)
 
         return Response({"error": "Bad Request"}, status=status.HTTP_400_BAD_REQUEST)
