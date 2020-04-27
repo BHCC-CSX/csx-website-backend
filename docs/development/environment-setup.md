@@ -124,6 +124,11 @@ While the venv is active, you can run python using the `python` command, regardl
 
 To deactivate the venv, simply run the command `deactivate`.
 
+```eval_rst
+.. note::
+    ALL other project documentation will assume you are running with your venv active.
+```
+
 ## Git
 
 This project is developed using Git for version control. Git allows multiple people to work on the same
