@@ -34,11 +34,11 @@ class UserList(CustomAPIView):
                                     500: "Internal Server Error"}, request_body=request_schema,
                          operation_id="users_bulk_ids_to_names")
     def post(self, request, format=None):
-        ids = request.data
+        ids = set(request.data)  # Remove duplicates
         names = User.objects.filter(pk__in=ids)
-        serializer = UserNamesSerializer(names, many=True)
+        data = {name.id: UserNamesSerializer(name).data for name in names}  # Build the response dict
         if len(names) == len(ids):
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(data, status=status.HTTP_200_OK)
 
         return Response({"error": "Bad Request"}, status=status.HTTP_400_BAD_REQUEST)
 
