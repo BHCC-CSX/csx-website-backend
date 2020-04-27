@@ -234,11 +234,11 @@ class ResolveCategoryID(APIView):
                                     400: "Bad Request"},
                          operation_id="blog_categories_names_to_ids", request_body=request_schema)
     def post(self, request, format=None):
-        names = request.data
-        order = Case(*[When(name=name, then=pos) for pos, name in enumerate(names)])
-        ids = Category.objects.filter(name__in=names).values_list("id", flat=True).order_by(order)
-        if len(names) == len(ids):
-            return Response(list(ids), status=status.HTTP_200_OK)
+        names = set(request.data)  # Remove duplicates
+        objs = Category.objects.filter(name__in=names)
+        data = {obj.name: obj.id for obj in objs}
+        if len(names) == len(objs):
+            return Response(data, status=status.HTTP_200_OK)
 
         return Response({"error": "Bad Request"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -259,10 +259,10 @@ class ResolveCategoryName(APIView):
                                     400: "Bad Request"},
                          operation_id="blog_categories_ids_to_names", request_body=request_schema)
     def post(self, request, format=None):
-        ids = request.data
-        order = Case(*[When(pk=id_, then=pos) for pos, id_ in enumerate(ids)])
-        names = Category.objects.filter(pk__in=ids).values_list("name", flat=True).order_by(order)
+        ids = set(request.data)  # Remove duplicates
+        names = Category.objects.filter(pk__in=ids)
+        data = {name.id: name.name for name in names}
         if len(names) == len(ids):
-            return Response(list(names), status=status.HTTP_200_OK)
+            return Response(data, status=status.HTTP_200_OK)
 
         return Response({"error": "Bad Request"}, status=status.HTTP_400_BAD_REQUEST)
