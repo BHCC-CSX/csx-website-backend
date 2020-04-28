@@ -1,5 +1,11 @@
 # Writing a Django App
 
+```eval_rst 
+.. note::
+    This section focuses on traditional Django apps. Django Rest Framework specific 
+    documentation can be found in the next section.
+```
+
 Now that you have setup your development environment, you are ready to start writing code to 
 contribute to the backend. One way to do this is to write an app for the backend!
 
