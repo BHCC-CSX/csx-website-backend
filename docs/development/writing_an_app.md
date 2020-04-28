@@ -279,10 +279,5 @@ _About DRF Serializers_ -->
 ## The `admin.py` File
 _Brief Description_
 
-
 <!-- ## Site Hooks
 _Something Custom to explain_ -->
-
-
-## Tests
-_About_
