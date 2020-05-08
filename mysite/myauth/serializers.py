@@ -27,10 +27,10 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         except User.DoesNotExist:
             pass
 
-        if not data.get('password') or not data.get('confirm_password'):
+        if not data.get('password') or not self.initial_data.get('confirm_password'):
             raise serializers.ValidationError(_("Empty Password"))
 
-        if data.get('password') != data.get('confirm_password'):
+        if data.get('password') != self.initial_data.get('confirm_password'):
             raise serializers.ValidationError(_("Mismatch"))
 
         return data
