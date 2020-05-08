@@ -55,7 +55,6 @@ class UserRegister(APIView):
     def post(self, request, format=None):
         if request.auth is None:
             data = request.data
-            data = data.dict()
             serializer = UserRegisterSerializer(data=data)
             if serializer.is_valid():
                 try:
@@ -68,7 +67,7 @@ class UserRegister(APIView):
 
                         return Response(json.loads(body), status=token_status)
                 except Exception as e:
-                    return Response(data={"error": e.message}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response(data={"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_403_FORBIDDEN)
 
