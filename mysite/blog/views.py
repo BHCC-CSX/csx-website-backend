@@ -46,7 +46,7 @@ class PostDetail(CustomAPIView):
     """
     permission_classes = {"get": [permissions.AllowAny],
                           "patch": [permissions.IsAuthenticated],
-                          "delete": [permissions.IsAdminUser]}
+                          "delete": [permissions.IsAuthenticated]}
     @staticmethod
     def __get_obj(obj_id):
         try:
@@ -103,7 +103,7 @@ class PostDetail(CustomAPIView):
 class PostImage(CustomAPIView):
     parser_classes = (MultiPartParser, ImageParser)
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = {"post": [permissions.IsAuthenticated]}
 
     @swagger_auto_schema(responses={201: "Resource Created",
                                     400: "Bad Request",
