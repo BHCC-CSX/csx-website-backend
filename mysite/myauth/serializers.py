@@ -17,7 +17,7 @@ class UserNamesSerializer(serializers.ModelSerializer):
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
-    confirm_password = serializers.CharField()
+    confirm_password = serializers.CharField(allow_blank=False, read_only=True)
 
     def validate(self, data):
         try:
@@ -27,11 +27,17 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         except User.DoesNotExist:
             pass
 
+        if not data.get('first_name'):
+            raise serializers.ValidationError(_("First Name Error: This field may not be blank"))
+
+        if not data.get('last_name'):
+            raise serializers.ValidationError(_("Last Name Error: This field may not be blank"))
+
         if not data.get('password') or not self.initial_data.get('confirm_password'):
-            raise serializers.ValidationError(_("Empty Password"))
+            raise serializers.ValidationError(_("Password Error: This field may not be blank"))
 
         if data.get('password') != self.initial_data.get('confirm_password'):
-            raise serializers.ValidationError(_("Mismatch"))
+            raise serializers.ValidationError(_("Passwords do not match"))
 
         return data
 
