@@ -23,7 +23,7 @@ class PostList(CustomAPIView):
     @swagger_auto_schema(responses={200: PostSerializer(many=True), 500: "Internal Server Error"})
     def get(self, request, format=None):
         posts = Post.objects.all()
-        serializer = PostSerializer(posts, many=True)
+        serializer = PostSerializer(posts, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(responses={201: "Post Created", 400: "Bad Request", 500: "Internal Server Error"},
@@ -69,7 +69,7 @@ class PostDetail(CustomAPIView):
         post, error = self.__get_obj(post_id)
         if post is None:
             return Response(data=error, status=status.HTTP_404_NOT_FOUND)
-        serializer = PostSerializer(post)
+        serializer = PostSerializer(post, context={'reqiest': request})
         return Response(serializer.data)
 
     @swagger_auto_schema(responses={200: "Success",
@@ -214,7 +214,7 @@ class CategoryPosts(CustomAPIView):
         if len(posts) is 0:
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-        serializer = PostSerializer(posts, many=True)
+        serializer = PostSerializer(posts, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
