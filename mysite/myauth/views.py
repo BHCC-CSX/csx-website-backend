@@ -9,6 +9,7 @@ from drf_yasg import openapi
 import json
 from django.db import transaction
 from mysite.views import CustomAPIView
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 # Create your views here.
@@ -60,12 +61,10 @@ class UserRegister(APIView):
                 try:
                     with transaction.atomic():
                         user = serializer.save()
-
-                        url, headers, body, token_status = self.create_token_response(request)
-                        if token_status != 200:
-                            raise Exception(json.loads(body).get("error_description", ""))
-
-                        return Response(json.loads(body), status=token_status)
+                        serialized_user = UserSerializer(user)
+                        refresh = RefreshToken.for_user(user)
+                        data = {'user':serialized_user.data,'refresh':str(refresh), 'access':str(refresh.access_token)}
+                        return Response(data, status=status.HTTP_201_CREATED)
                 except Exception as e:
                     return Response(data={"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
