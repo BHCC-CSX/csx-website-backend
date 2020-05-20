@@ -271,7 +271,24 @@ in the template.
 ```
 
 ## URLs
-_About_
+Now, we need to tell Django to take our URL and figure out what to do with it. This is where the URLs
+file comes into play. Every application will define its specific URL paths, and which view to use for them.
+
+Each `urls.py` contains a list called `urlpatterns`, this list is used by django as a reference to find which
+view to run when a request comes in to a url.
+
+Example `urls.py`:
+```python
+from django.urls import path
+
+urlpatterns = [
+    path('', ),
+    path('', ),
+    path('', ),
+    path('', ),
+    path('', ),
+]
+```
 
 <!-- ## Serializers
 _About DRF Serializers_ -->
