@@ -32,7 +32,10 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
         if not data.get('last_name'):
             raise serializers.ValidationError(_("Last Name Error: This field may not be blank"))
-
+        
+        if not data.get('email'):
+            raise serializers.ValidationError(_("Email Error: This field may not be blank"))
+        
         if not data.get('password') or not self.initial_data.get('confirm_password'):
             raise serializers.ValidationError(_("Password Error: This field may not be blank"))
 
@@ -43,7 +46,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'password', 'confirm_password', 'is_active')
+        fields = ('username', 'first_name', 'last_name', 'password', 'confirm_password', 'email', 'is_active')
         extra_kwargs = {'confirm_password': {'read_only': True}}
 
 
