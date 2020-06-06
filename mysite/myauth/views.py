@@ -10,9 +10,29 @@ import json
 from django.db import transaction
 from mysite.views import CustomAPIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 
 
 # Create your views here.
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        print(serializer)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
+        print('we here')
+
+        user = User.objects.get(username=request.data.get('username'))
+        if not user.is_valid:
+            print('user not valid')
+            return Response(data={"error": 'Please activate your account before attempting to log in.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
+
 class UserList(CustomAPIView):
     """
     API Endpoint to list users.
