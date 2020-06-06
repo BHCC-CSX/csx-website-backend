@@ -25,16 +25,14 @@ from django.core.mail import EmailMessage
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        print(serializer)
+
         try:
             serializer.is_valid(raise_exception=True)
         except TokenError as e:
             raise InvalidToken(e.args[0])
-        print('we here')
 
         user = User.objects.get(username=request.data.get('username'))
-        if not user.is_valid:
-            print('user not valid')
+        if not user.is_active:
             return Response(data={"error": 'Please activate your account before attempting to log in.'}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
@@ -84,12 +82,10 @@ class UserRegister(APIView):
             data = request.data
             data['is_active'] = False
             serializer = UserRegisterSerializer(data=data)
-            print(serializer)
             if serializer.is_valid():
                 try:
                     with transaction.atomic():
                         user = serializer.save()
-                        print(user)
                         
                         current_site = get_current_site(request)
                         mail_subject = "Activate your CSX account."
