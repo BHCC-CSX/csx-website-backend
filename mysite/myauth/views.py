@@ -12,6 +12,12 @@ from mysite.views import CustomAPIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from .tokens import account_activation_token
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
 
 
 # Create your views here.
@@ -76,11 +82,27 @@ class UserRegister(APIView):
     def post(self, request, format=None):
         if request.auth is None:
             data = request.data
+            data['is_active'] = False
             serializer = UserRegisterSerializer(data=data)
+            print(serializer)
             if serializer.is_valid():
                 try:
                     with transaction.atomic():
                         user = serializer.save()
+                        print(user)
+                        
+                        current_site = get_current_site(request)
+                        mail_subject = "Activate your CSX account."
+                        message = render_to_string('acc_active_email.html', {
+                            'user': user,
+                            'domain': current_site.domain,
+                            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                            'token': account_activation_token.make_token(user)
+                        })
+                        to_email = user.email
+                        email = EmailMessage(mail_subject, message, to=[to_email])
+                        email.send()
+
                         serialized_user = UserSerializer(user)
                         refresh = RefreshToken.for_user(user)
                         data = {'user':serialized_user.data,'refresh':str(refresh), 'access':str(refresh.access_token)}
