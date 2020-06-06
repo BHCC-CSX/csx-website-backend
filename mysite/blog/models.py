@@ -23,6 +23,7 @@ class Post(models.Model):
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user))
     image = models.ImageField(upload_to='images', null=True)
+    approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
