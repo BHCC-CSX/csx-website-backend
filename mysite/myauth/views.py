@@ -112,6 +112,31 @@ class UserRegister(APIView):
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_403_FORBIDDEN)
 
+class UserActivate(APIView):
+    """
+    API Endpoint to activate a user's account.
+    METHODS: POST
+    """
+
+    permission_classes = [permissions.AllowAny]
+    @swagger_auto_schema(responses={200: "Success", 500: "Internal Server Error",
+                                    400: "Bad Request", 403: "Bad Request", 201: "Created"})
+    def post(self, request, format=None):
+        try:
+            uid = force_text(urlsafe_base64_decode(request.data['uidb64']))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        
+        if user and account_activation_token.check_token(user, request.data['token']):
+            user.is_active = True
+            user.save()
+            return Response(status=status.HTTP_200_OK)
+        else:
+
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
 
 class UserDetail(APIView):
     """
