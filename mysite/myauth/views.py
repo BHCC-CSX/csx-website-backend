@@ -13,14 +13,23 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from .tokens import account_activation_token
-from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
-from django.core.mail import EmailMessage
+from requests import post
+import os
 
 
 # Create your views here.
+
+def send_confirmation_email(email, subject, message):
+	return post(
+		os.environ['MAILGUN_BASE_URL'] + "/messages",
+		auth=("api", os.environ['MAILGUN_API_KEY']),
+		data={"from": "Account Registration <mailgun@bhcsx.me>",
+			"to": email,
+			"subject": subject,
+			"text": message})
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
@@ -86,18 +95,16 @@ class UserRegister(APIView):
                 try:
                     with transaction.atomic():
                         user = serializer.save()
-                        
-                        current_site = get_current_site(request)
-                        mail_subject = "Activate your CSX account."
+                    
+                        subject = "Activate your CSX account."
                         message = render_to_string('acc_active_email.html', {
                             'user': user,
-                            'domain': current_site.domain,
+                            'domain': request.META['HTTP_ORIGIN'],
                             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                             'token': account_activation_token.make_token(user)
                         })
-                        to_email = user.email
-                        email = EmailMessage(mail_subject, message, to=[to_email])
-                        email.send()
+                        
+                        send_confirmation_email(user.email, subject, message)
 
                         serialized_user = UserSerializer(user)
                         refresh = RefreshToken.for_user(user)
